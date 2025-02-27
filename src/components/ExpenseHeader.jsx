@@ -17,7 +17,6 @@ const ExpenseHeader = ({ toggleForm, income }) => {
                     Add expense
                 </button>
             </div>
-            {/* <hr className='my-4' /> */}
         </>
     )
 }
