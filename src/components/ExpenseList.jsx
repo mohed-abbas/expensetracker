@@ -1,14 +1,13 @@
 import React from 'react'
 import ExpenseItem from './ExpenseItem'
 
-const ExpenseList = ({expenses , deleteExpense}) => {
+const ExpenseList = ({ expenses, deleteExpense, editExpense }) => {
     return (
         <>
-            <h1 className='text-3xl'>Transaction list</h1>
-            <ul className='w-2/12'>
+            <ul className='w-full flex gap-2 flex-wrap'>
                 {expenses.map((expense) => {
                     return (
-                        <ExpenseItem key={expense.id} expense={expense} deleteExpense={deleteExpense} />
+                        <ExpenseItem key={expense.id} editExpense={editExpense} expense={expense} deleteExpense={deleteExpense} />
                     )
                 })}
             </ul>

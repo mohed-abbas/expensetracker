@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from './core/Input'
 
-const ExpenseForm = ({ addExpense, toggleForm }) => {
+const ExpenseForm = ({
+    addExpense,
+    closeForm,
+    expensetoEdit,
+    updateExpense
+}) => {
 
     const [formData, setformData] = useState({
         description: '',
@@ -12,6 +17,10 @@ const ExpenseForm = ({ addExpense, toggleForm }) => {
         notes: '',
         paymentMethod: ''
     })
+
+
+    const buttonText = expensetoEdit ? 'Update Expense' : 'Add Expense'
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -24,8 +33,12 @@ const ExpenseForm = ({ addExpense, toggleForm }) => {
             notes: formData.notes,
             paymentMethod: formData.paymentMethod
         }
+        if (expensetoEdit) {
+            updateExpense(expensetoEdit.id, expense)
+        } else {
+            addExpense(expense)
+        }
         resetInputs()
-        addExpense(expense)
     }
 
 
@@ -35,9 +48,26 @@ const ExpenseForm = ({ addExpense, toggleForm }) => {
         })
     }
 
+
+    useEffect(() => {
+        if (expensetoEdit) {
+            setformData({
+                description: expensetoEdit.description || '',
+                amount: expensetoEdit.amount,
+                type: expensetoEdit.type,
+                date: expensetoEdit.date,
+                category: expensetoEdit.category,
+                notes: expensetoEdit.notes,
+                paymentMethod: expensetoEdit.paymentMethod
+            });
+        }
+
+    }, [expensetoEdit, setformData])
+
+
     return (
         <>
-            <div className='fixed inset-0 flex items-center justify-center z-50' id='blurred' onClick={toggleForm}>
+            <div className='fixed inset-0 flex items-center justify-center z-50' id='blurred' onClick={() => closeForm()}>
                 <div onClick={e => e.stopPropagation()}>
                     <form id="expense__form" className='w-10/12 mx-auto p-6 bg-white shadow-md rounded-lg' onSubmit={handleSubmit}>
                         <h1 className='text-3xl mb-2'>Add Expense</h1>
@@ -109,7 +139,7 @@ const ExpenseForm = ({ addExpense, toggleForm }) => {
                             type='submit'
                             className='w-full button button-cta  font-bold py-2 px-4 rounded focus:outline-none focus:ring cursor-pointer'
                         >
-                            Add Expense
+                            {buttonText}
                         </button>
                     </form>
                 </div>
